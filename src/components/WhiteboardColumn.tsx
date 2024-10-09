@@ -1,4 +1,3 @@
-import * as vscode from 'vscode';
 import React, { useState, useEffect } from 'react';
 import PublishButton from './PublishButton';
 import axios from 'axios';
@@ -97,6 +96,7 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
 
   const handleInputSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && inputValue.trim()) {
+      console.log('Input submitted:', inputValue.trim());
       setMessages(prev => [...prev, { role: 'user', content: inputValue.trim() }]);
       setInputValue('');
     }
