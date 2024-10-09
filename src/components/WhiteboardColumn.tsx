@@ -40,6 +40,7 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
   const sendPromptToGroq = async (prompt: string) => {
     setIsLoading(true);
     setError('');
+
     const apiKey = localStorage.getItem('groq_api_key');
     if (!apiKey) {
       setError('Groq API key is not set. Please set it in the Admin Settings.');
@@ -48,7 +49,7 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
     }
 
     const content = messages.map(msg => msg.content).join('\n\n');
-    
+
     try {
       const response = await axios.post(
         'https://api.groq.com/openai/v1/chat/completions',
@@ -56,7 +57,7 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
           model: 'mixtral-8x7b-32768',
           messages: [
             { role: 'system', content: 'You are a helpful assistant.' },
-            { role: 'user', content: `${prompt}\n\nContent:\n${content}` }
+            { role: 'user', content: `${prompt}\n\nContent:\n${content}` },
           ],
           max_tokens: 1024,
         },
@@ -78,6 +79,7 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
     }
   };
 
+  // Handler functions for the buttons
   const handleRewrite = () => sendPromptToGroq('Rewrite the following content to improve clarity and coherence:');
   const handleFormat = () => sendPromptToGroq('Format the following content to improve readability:');
   const handleFAQs = () => sendPromptToGroq('Generate a list of FAQs based on the following content:');
