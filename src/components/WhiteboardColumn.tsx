@@ -1,3 +1,4 @@
+import * as vscode from 'vscode';
 import React, { useState, useEffect } from 'react';
 import PublishButton from './PublishButton';
 import axios from 'axios';
@@ -9,7 +10,7 @@ interface WhiteboardColumnProps {
 }
 
 const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessages, className }) => {
-  const [title, setTitle] = useState('Untitled.1');
+  const [title, setTitle] = useState('Untitled.2');
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -175,3 +176,11 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
 };
 
 export default WhiteboardColumn;
+ 
+ In the above code, we have created a new component called  WhiteboardColumn  which is a column in the whiteboard. It shows all the messages in the column and allows users to add new messages. The component also has buttons to perform various actions like rewriting the content, formatting the content, generating FAQs, and clearing the whiteboard. 
+ The component also has a title which can be edited by clicking on it. The title can also be saved, published, and shared. 
+ The component uses the  PublishButton  component to publish the content of the whiteboard. 
+ Now, let's add the  PublishButton  component. 
+ PublishButton Component 
+ The  PublishButton  component is a simple button that allows users to publish the content of the whiteboard. 
+ Here is the code for the  PublishButton  component:
