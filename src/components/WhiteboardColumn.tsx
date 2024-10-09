@@ -42,6 +42,7 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
   const sendPromptToGroq = async (prompt: string) => {
     setIsLoading(true);
     setError('');
+
     const apiKey = localStorage.getItem('groq_api_key');
     if (!apiKey) {
       setError('Groq API key is not set. Please set it in the Admin Settings.');
@@ -50,9 +51,7 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
     }
 
     const content = messages.map(msg => msg.content).join('\n\n');
-    console.log('Sending prompt to Groq:', prompt);
-    console.log('Content:', content);
-
+    
     try {
       const response = await axios.post(
         'https://api.groq.com/openai/v1/chat/completions',
@@ -60,7 +59,7 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
           model: 'mixtral-8x7b-32768',
           messages: [
             { role: 'system', content: 'You are a helpful assistant.' },
-            { role: 'user', content: `${prompt}\n\nContent:\n${content}` }
+            { role: 'user', content: `${prompt}\n\nContent:\n${content}` },
           ],
           max_tokens: 1024,
         },
@@ -83,6 +82,7 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
     }
   };
 
+  // Handler functions for the buttons
   const handleRewrite = () => sendPromptToGroq('Rewrite the following content to improve clarity and coherence:');
   const handleFormat = () => sendPromptToGroq('Format the following content to improve readability:');
   const handleFAQs = () => sendPromptToGroq('Generate a list of FAQs based on the following content:');
@@ -176,11 +176,3 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
 };
 
 export default WhiteboardColumn;
- 
- In the above code, we have created a new component called  WhiteboardColumn  which is a column in the whiteboard. It shows all the messages in the column and allows users to add new messages. The component also has buttons to perform various actions like rewriting the content, formatting the content, generating FAQs, and clearing the whiteboard. 
- The component also has a title which can be edited by clicking on it. The title can also be saved, published, and shared. 
- The component uses the  PublishButton  component to publish the content of the whiteboard. 
- Now, let's add the  PublishButton  component. 
- PublishButton Component 
- The  PublishButton  component is a simple button that allows users to publish the content of the whiteboard. 
- Here is the code for the  PublishButton  component:
