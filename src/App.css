@@ -36,22 +36,15 @@ body {
 .main {
   display: flex;
   flex: 1;
-  overflow: hidden;
-}
-
-.column {
-  padding: 10px;
-  border: 1px solid #e0e0e0;
-  height: 100%;
-  box-sizing: border-box;
+  overflow: hidden; /* Prevent overflow of the main container */
 }
 
 /* Menu styles */
 #menu {
-  width: 15%;
+  width: 200px; /* Fixed width for the menu */
   background-color: #f0f0f0;
-  position: relative;
   padding-top: 10px;
+  flex-shrink: 0; /* Prevent shrinking */
 }
 
 #menu ul {
@@ -77,19 +70,20 @@ body {
   content: '➡️';
   font-size: 20px;
   margin-right: 10px;
-  visibility: visible;
 }
 
 /* Tool and Results columns */
 #tool, #results {
-  width: 42.5%;
+  width: 400px; /* Fixed width for both columns */
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden; /* Hide overflow */
 }
 
 #results {
   background-color: #f9f9f9;
+  overflow-y: auto; /* Enable vertical scrolling if content exceeds height */
 }
 
 /* Chat box styles */

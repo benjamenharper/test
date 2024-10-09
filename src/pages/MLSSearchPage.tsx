@@ -12,6 +12,7 @@ const MLSSearchPage: React.FC<MLSSearchPageProps> = ({ onInsertToWhiteboard }) =
   const [imageUrl, setImageUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [rawApiData, setRawApiData] = useState<any>(null); // New state to hold raw API data
 
   const handleSearch = async () => {
     setIsLoading(true);
@@ -20,6 +21,7 @@ const MLSSearchPage: React.FC<MLSSearchPageProps> = ({ onInsertToWhiteboard }) =
     setPrice('');
     setDescription('');
     setImageUrl('');
+    setRawApiData(null); // Reset raw API data on new search
 
     try {
       const trimmedMlsId = mlsId.trim();
@@ -29,7 +31,7 @@ const MLSSearchPage: React.FC<MLSSearchPageProps> = ({ onInsertToWhiteboard }) =
         {
           method: 'GET',
           headers: {
-            'x-rapidapi-key': 'YOUR_API_KEY_HERE', // Replace with your actual API key
+            'x-rapidapi-key': '72b25b9609mshf22de8083b9ef4bp18d5b9jsn2b059ddfdc06', // Replace with your actual API key
             'x-rapidapi-host': 'us-real-estate-listings.p.rapidapi.com',
             'Content-Type': 'application/json',
           },
@@ -43,7 +45,10 @@ const MLSSearchPage: React.FC<MLSSearchPageProps> = ({ onInsertToWhiteboard }) =
       }
 
       const data = await response.json();
-      console.log('API Response:', data);
+      console.log('API Response:', data); // Log the raw API response
+
+      // Set raw API data for display
+      setRawApiData(data);
 
       if (data.search && data.search.results && Array.isArray(data.search.results) && data.search.results.length > 0) {
         const property = data.search.results[0];
@@ -76,7 +81,10 @@ const MLSSearchPage: React.FC<MLSSearchPageProps> = ({ onInsertToWhiteboard }) =
 
   const handleSampleMLSIdClick = () => {
     setMlsId('24-449959'); // Set the sample MLS ID
-    handleSearch(); // Trigger the search
+  };
+
+  const handleSearchWithSampleId = () => {
+    handleSearch();
   };
 
   return (
@@ -101,7 +109,13 @@ const MLSSearchPage: React.FC<MLSSearchPageProps> = ({ onInsertToWhiteboard }) =
       {/* Sample MLS ID link */}
       <div className="mt-2">
         <span>Try the sample MLS ID: </span>
-        <button onClick={handleSampleMLSIdClick} className="text-blue-500 underline ml-1">
+        <button
+          onClick={() => {
+            handleSampleMLSIdClick();
+            setTimeout(handleSearchWithSampleId, 0); // Call handleSearch with a delay
+          }}
+          className="text-blue-500 underline ml-1"
+        >
           24-449959
         </button>
       </div>
@@ -146,6 +160,13 @@ const MLSSearchPage: React.FC<MLSSearchPageProps> = ({ onInsertToWhiteboard }) =
               Send Image
             </button>
           </div>
+        </div>
+      )}
+      {/* Raw API Data Output */}
+      {rawApiData && (
+        <div className="mt-4 bg-gray-100 p-4 rounded">
+          <h4 className="font-bold mb-2">Raw API Data:</h4>
+          <pre>{JSON.stringify(rawApiData, null, 2)}</pre>
         </div>
       )}
     </div>
