@@ -11,7 +11,6 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
   const [title, setTitle] = useState('Untitled.2');
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [inputValue, setInputValue] = useState('');
-  const [assistantInput, setAssistantInput] = useState('');
   const [instructionInput, setInstructionInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [apiKeySet, setApiKeySet] = useState(false);
@@ -83,8 +82,9 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
   };
 
   const handleRewrite = () => sendPromptToGroq('Rewrite the following content to improve clarity and coherence:');
-  const handleFormat = () => sendPromptToGroq('Format the following content to improve readability:');
+  const handleCompare = () => sendPromptToGroq('Compare the following two properties:');
   const handleFAQs = () => sendPromptToGroq('Generate a list of FAQs based on the following content:');
+  const handleFormat = () => sendPromptToGroq('Format the following content to improve readability:');
   const handleClear = () => {
     setMessages([]);
     setError('');
@@ -99,14 +99,6 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
       console.log('Input submitted:', inputValue.trim());
       setMessages(prev => [...prev, { role: 'user', content: inputValue.trim() }]);
       setInputValue('');
-    }
-  };
-
-  const handleAssistantInputSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && assistantInput.trim()) {
-      console.log('Assistant input submitted:', assistantInput.trim());
-      sendPromptToGroq(assistantInput.trim());
-      setAssistantInput('');
     }
   };
 
@@ -173,15 +165,7 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
           value={inputValue}
           onChange={handleInputChange}
           onKeyPress={handleInputSubmit}
-          placeholder="Type your message here..."
-          className="w-full p-2 border rounded mb-2"
-        />
-        <input
-          type="text"
-          value={assistantInput}
-          onChange={(e) => setAssistantInput(e.target.value)}
-          onKeyPress={handleAssistantInputSubmit}
-          placeholder="Chat with the assistant..."
+          placeholder="Add Text Content & Context to Whiteboard..."
           className="w-full p-2 border rounded mb-2"
         />
         <input
@@ -189,14 +173,15 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
           value={instructionInput}
           onChange={(e) => setInstructionInput(e.target.value)}
           onKeyPress={handleInstructionInputSubmit}
-          placeholder="Instructions or Prompt for AI Remix..."
+          placeholder="Type Instructions or Prompt for AI Remix..."
           className="w-full p-2 border rounded mb-2"
         />
-        <div className="flex justify-between">
-          <button onClick={handleRewrite} className="px-2 py-1 bg-green-500 text-white rounded">Rewrite</button>
-          <button onClick={handleFormat} className="px-2 py-1 bg-yellow-500 text-white rounded">Format</button>
-          <button onClick={handleFAQs} className="px-2 py-1 bg-blue-500 text-white rounded">FAQs</button>
-          <button onClick={handleClear} className="px-2 py-1 bg-red-500 text-white rounded">Clear</button>
+        <div className="flex justify-between mb-2">
+          <button onClick={handleRewrite} className="px-2 py-1 bg-gray-500 text-white rounded">Rewrite</button>
+          <button onClick={handleCompare} className="px-2 py-1 bg-gray-500 text-white rounded">Compare</button>
+          <button onClick={handleFAQs} className="px-2 py-1 bg-gray-500 text-white rounded">FAQs</button>
+          <button onClick={handleFormat} className="px-2 py-1 bg-gray-500 text-white rounded">Format</button>
+          <button onClick={handleClear} className="px-2 py-1 bg-gray-500 text-white rounded">Clear</button>
         </div>
       </div>
     </div>
