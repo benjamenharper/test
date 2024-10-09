@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'; 
 import PublishButton from './PublishButton';
 import axios from 'axios';
 
@@ -50,7 +50,9 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
     }
 
     const content = messages.map(msg => msg.content).join('\n\n');
-    
+    console.log('Sending prompt to Groq:', prompt);
+    console.log('Content:', content);
+
     try {
       const response = await axios.post(
         'https://api.groq.com/openai/v1/chat/completions',
@@ -81,7 +83,6 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
     }
   };
 
-  // Handler functions for the buttons
   const handleRewrite = () => sendPromptToGroq('Rewrite the following content to improve clarity and coherence:');
   const handleFormat = () => sendPromptToGroq('Format the following content to improve readability:');
   const handleFAQs = () => sendPromptToGroq('Generate a list of FAQs based on the following content:');
@@ -129,9 +130,9 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
             )}
           </div>
           <div className="flex gap-2">
-            <button onClick={handleSave} className="px-2 py-1 bg-gray-500 text-white rounded text-xs">Save</button>
+            <button onClick={handleSave} className="px-2 py-1 bg-blue-500 text-white rounded text-xs">Save</button>
             <PublishButton content={messages.map(msg => `${msg.role}: ${msg.content}`).join('\n\n')} />
-            <button onClick={handleShare} className="px-2 py-1 bg-gray-500 text-white rounded text-xs">Share</button>
+            <button onClick={handleShare} className="px-2 py-1 bg-blue-500 text-white rounded text-xs">Share</button>
           </div>
         </div>
       </div>
@@ -165,11 +166,8 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
           <button onClick={handleRewrite} className="px-2 py-1 bg-green-500 text-white rounded text-sm" disabled={isLoading || !apiKeySet}>Rewrite</button>
           <button onClick={handleFormat} className="px-2 py-1 bg-yellow-500 text-white rounded text-sm" disabled={isLoading || !apiKeySet}>Format</button>
           <button onClick={handleFAQs} className="px-2 py-1 bg-purple-500 text-white rounded text-sm" disabled={isLoading || !apiKeySet}>FAQs</button>
-          <button onClick={handleClear} className="px-2 py-1 bg-red-500 text-white rounded text-sm" disabled={isLoading}>Clear</button>
+          <button onClick={handleClear} className="px-2 py-1 bg-red-500 text-white rounded text-sm">Clear</button>
         </div>
-        {!apiKeySet && (
-          <p className="text-red-500 mt-2">Groq API key is not set. Please set it in the Admin Settings to use these features.</p>
-        )}
       </div>
     </div>
   );
