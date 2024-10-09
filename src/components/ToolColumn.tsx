@@ -6,7 +6,8 @@ import ImageGenPage from '../pages/ImageGenPage';
 import AdminSettingsPage from '../pages/AdminSettingsPage';
 import PromptIdeas from './PromptIdeas';
 import ChatAssistant from './ChatAssistant'; // Import the ChatAssistant component
-import WelcomeMsg from './welcomeMSGlcomeMsg'; // Import the new WelcomeMsg component
+import WelcomeMsg from './welcomeMSG'; // Import the new WelcomeMsg component
+
 
 interface ToolColumnProps {
   selectedTool: string | null;
@@ -35,11 +36,10 @@ const ToolColumn: React.FC<ToolColumnProps> = ({ selectedTool, onInsertToWhitebo
       case 'admin-settings':
         return <AdminSettingsPage />;
       default:
-        return <p>Select a tool from the menu to get started.</p>;
+        return <p><br/>&nbsp;&nbsp;Select a tool from the menu to get started.</p>;
     }
   };
-
-  return (
+  return (    
     <div className={`relative border-r border-gray-200 transition-all duration-300 ${isCollapsed ? 'w-8' : className}`}>
       <button
         onClick={() => setIsCollapsed(!isCollapsed)}
@@ -60,14 +60,7 @@ const ToolColumn: React.FC<ToolColumnProps> = ({ selectedTool, onInsertToWhitebo
       <div className={`overflow-y-auto h-full ${isCollapsed ? 'invisible' : 'visible'}`}>
         {renderTool()}
       </div>
-      {/* Integrate the ChatAssistant component at the bottom */}
-      <div className="p-4 border-t border-gray-200">
-        <ChatAssistant 
-          messages={messages}
-          setMessages={setMessages}
-          onInsertToWhiteboard={onInsertToWhiteboard} 
-        />
-      </div>
+      
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-// ChatAssistant.tsx or wherever ChatAssistantProps is defined
+// ChatAssistantProps interface
 interface ChatAssistantProps {
   onInsertToWhiteboard: (content: string) => void;
   messages: Array<{ role: string; content: string }>;
@@ -13,6 +13,7 @@ const ChatAssistant: React.FC<ChatAssistantProps> = ({ messages, setMessages, on
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
+  // Effect to check for the API key
   useEffect(() => {
     const apiKey = localStorage.getItem('groq_api_key');
     if (!apiKey) {
@@ -20,6 +21,7 @@ const ChatAssistant: React.FC<ChatAssistantProps> = ({ messages, setMessages, on
     }
   }, []);
 
+  // Function to send prompt to the Groq API
   const sendPromptToGroq = async (prompt: string) => {
     setIsLoading(true);
     setError('');
@@ -62,6 +64,7 @@ const ChatAssistant: React.FC<ChatAssistantProps> = ({ messages, setMessages, on
     }
   };
 
+  // Handle instruction input submit
   const handleInstructionInputSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && instructionInput.trim()) {
       sendPromptToGroq(instructionInput.trim());
@@ -71,6 +74,16 @@ const ChatAssistant: React.FC<ChatAssistantProps> = ({ messages, setMessages, on
 
   return (
     <div className="p-4 bg-white border-t">
+      {/* Chat Messages Display */}
+      <div className="messages mb-4" style={{ maxHeight: '200px', overflowY: 'auto' }}>
+        {messages.map((msg, index) => (
+          <div key={index} className={`message ${msg.role}`}>
+            <strong>{msg.role}</strong>: {msg.content}
+          </div>
+        ))}
+      </div>
+
+      {/* Instruction Input */}
       <input
         type="text"
         value={instructionInput}
@@ -79,6 +92,8 @@ const ChatAssistant: React.FC<ChatAssistantProps> = ({ messages, setMessages, on
         placeholder="Type Instructions or Prompt for AI Remix..."
         className="w-full p-2 border rounded mb-2"
       />
+
+      {/* Action Buttons */}
       <div className="flex justify-between mb-2">
         <button onClick={() => sendPromptToGroq('Rewrite the following content to improve clarity and coherence:')} className="px-2 py-1 bg-gray-500 text-white rounded">Rewrite</button>
         <button onClick={() => sendPromptToGroq('Compare the following two properties:')} className="px-2 py-1 bg-gray-500 text-white rounded">Compare</button>
@@ -86,6 +101,8 @@ const ChatAssistant: React.FC<ChatAssistantProps> = ({ messages, setMessages, on
         <button onClick={() => sendPromptToGroq('Format the following content to improve readability:')} className="px-2 py-1 bg-gray-500 text-white rounded">Format</button>
         <button onClick={() => setMessages([])} className="px-2 py-1 bg-gray-500 text-white rounded">Clear</button>
       </div>
+
+      {/* Loading and Error Messages */}
       {isLoading && <p className="text-gray-600">Processing...</p>}
       {error && <p className="text-red-500">{error}</p>}
     </div>
