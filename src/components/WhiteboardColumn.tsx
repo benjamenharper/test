@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react'; 
-import PublishButton from './PublishButton';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 interface WhiteboardColumnProps {
@@ -12,6 +11,8 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
   const [title, setTitle] = useState('Untitled.2');
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [inputValue, setInputValue] = useState('');
+  const [assistantInput, setAssistantInput] = useState('');
+  const [instructionInput, setInstructionInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [apiKeySet, setApiKeySet] = useState(false);
   const [error, setError] = useState('');
@@ -50,8 +51,6 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
     }
 
     const content = messages.map(msg => msg.content).join('\n\n');
-    console.log('Sending prompt to Groq:', prompt);
-    console.log('Content:', content);
 
     try {
       const response = await axios.post(
@@ -103,6 +102,22 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
     }
   };
 
+  const handleAssistantInputSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && assistantInput.trim()) {
+      console.log('Assistant input submitted:', assistantInput.trim());
+      sendPromptToGroq(assistantInput.trim());
+      setAssistantInput('');
+    }
+  };
+
+  const handleInstructionInputSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && instructionInput.trim()) {
+      console.log('Instruction input submitted:', instructionInput.trim());
+      sendPromptToGroq(instructionInput.trim());
+      setInstructionInput('');
+    }
+  };
+
   return (
     <div className={`flex flex-col h-full ${className}`}>
       <div className="p-4 bg-gray-100 flex flex-col">
@@ -130,9 +145,8 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
             )}
           </div>
           <div className="flex gap-2">
-            <button onClick={handleSave} className="px-2 py-1 bg-blue-500 text-white rounded text-xs">Save</button>
-            <PublishButton content={messages.map(msg => `${msg.role}: ${msg.content}`).join('\n\n')} />
-            <button onClick={handleShare} className="px-2 py-1 bg-blue-500 text-white rounded text-xs">Share</button>
+            <button onClick={handleSave} className="px-2 py-1 bg-gray-500 text-white rounded text-xs">Save</button>
+            <button onClick={handleShare} className="px-2 py-1 bg-gray-500 text-white rounded text-xs">Share</button>
           </div>
         </div>
       </div>
@@ -162,11 +176,27 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
           placeholder="Type your message here..."
           className="w-full p-2 border rounded mb-2"
         />
-        <div className="flex flex-wrap gap-2 justify-end">
-          <button onClick={handleRewrite} className="px-2 py-1 bg-green-500 text-white rounded text-sm" disabled={isLoading || !apiKeySet}>Rewrite</button>
-          <button onClick={handleFormat} className="px-2 py-1 bg-yellow-500 text-white rounded text-sm" disabled={isLoading || !apiKeySet}>Format</button>
-          <button onClick={handleFAQs} className="px-2 py-1 bg-purple-500 text-white rounded text-sm" disabled={isLoading || !apiKeySet}>FAQs</button>
-          <button onClick={handleClear} className="px-2 py-1 bg-red-500 text-white rounded text-sm">Clear</button>
+        <input
+          type="text"
+          value={assistantInput}
+          onChange={(e) => setAssistantInput(e.target.value)}
+          onKeyPress={handleAssistantInputSubmit}
+          placeholder="Chat with the assistant..."
+          className="w-full p-2 border rounded mb-2"
+        />
+        <input
+          type="text"
+          value={instructionInput}
+          onChange={(e) => setInstructionInput(e.target.value)}
+          onKeyPress={handleInstructionInputSubmit}
+          placeholder="Instructions or Prompt for AI Remix..."
+          className="w-full p-2 border rounded mb-2"
+        />
+        <div className="flex justify-between">
+          <button onClick={handleRewrite} className="px-2 py-1 bg-green-500 text-white rounded">Rewrite</button>
+          <button onClick={handleFormat} className="px-2 py-1 bg-yellow-500 text-white rounded">Format</button>
+          <button onClick={handleFAQs} className="px-2 py-1 bg-blue-500 text-white rounded">FAQs</button>
+          <button onClick={handleClear} className="px-2 py-1 bg-red-500 text-white rounded">Clear</button>
         </div>
       </div>
     </div>
