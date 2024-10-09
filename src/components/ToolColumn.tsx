@@ -5,6 +5,8 @@ import AreaSearchPage from '../pages/AreaSearchPage';
 import ImageGenPage from '../pages/ImageGenPage';
 import AdminSettingsPage from '../pages/AdminSettingsPage';
 import PromptIdeas from './PromptIdeas';
+import ChatAssistant from './ChatAssistant'; // Import the ChatAssistant component
+import WelcomeMsg from './welcomeMSGlcomeMsg'; // Import the new WelcomeMsg component
 
 interface ToolColumnProps {
   selectedTool: string | null;
@@ -14,71 +16,12 @@ interface ToolColumnProps {
 
 const ToolColumn: React.FC<ToolColumnProps> = ({ selectedTool, onInsertToWhiteboard, className }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [properties, setProperties] = useState([
-    { address: '123 Main St, Anytown, USA', id: 1 },
-    { address: '456 Elm St, Springfield, IL', id: 2 },
-    { address: '789 Oak Ave, Lakeside, CA', id: 3 },
-  ]);
-
-  const handleDelete = (id: number) => {
-    setProperties(properties.filter(prop => prop.id !== id));
-  };
-
-  const handleSendToWhiteboard = (address: string) => {
-    onInsertToWhiteboard(`Property: ${address}`);
-  };
+  const [messages, setMessages] = useState<{ role: string; content: string }[]>([]); // State for chat messages
 
   const renderTool = () => {
     switch (selectedTool) {
       case 'welcome':
-        return (
-          <div className="p-4">
-            <h2 className="text-xl font-bold mb-4">Welcome to RealtySynth</h2>
-            <p className="mb-4">
-              Select a tool from the menu to get started. You can add property data, generate images, 
-              and then remix it with AI in the whiteboard.
-            </p>
-
-            {/* New Section */}
-            <div className="border-2 border-gray-300 p-4 mb-4 rounded">
-              <h3 className="text-lg font-semibold mb-2">Enter A Property Address, MLS ID, or Neighborhood</h3>
-              <p className="mb-4">Start working with real estate data</p>
-              <form>
-                <input 
-                  type="text" 
-                  placeholder="Enter here..." 
-                  className="w-full p-2 border border-gray-400 rounded mb-2" 
-                />
-                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">Search</button>
-              </form>
-            </div>
-
-            <h3 className="text-lg font-semibold mb-2">Sample Properties</h3>
-            <ul className="space-y-2">
-              {properties.map((property) => (
-                <li key={property.id} className="flex items-center justify-between bg-gray-100 p-2 rounded">
-                  <span>{property.address}</span>
-                  <div>
-                    <button
-                      onClick={() => handleSendToWhiteboard(property.address)}
-                      className="text-blue-500 hover:text-blue-700 mr-2"
-                      title="Send to Whiteboard"
-                    >
-                      ➤
-                    </button>
-                    <button
-                      onClick={() => handleDelete(property.id)}
-                      className="text-red-500 hover:text-red-700"
-                      title="Delete"
-                    >
-                      ×
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        );
+        return <WelcomeMsg onInsertToWhiteboard={onInsertToWhiteboard} />;
       case 'prompt-ideas':
         return <PromptIdeas onInsertToWhiteboard={onInsertToWhiteboard} />;
       case 'mls-search':
@@ -116,6 +59,14 @@ const ToolColumn: React.FC<ToolColumnProps> = ({ selectedTool, onInsertToWhitebo
       </button>
       <div className={`overflow-y-auto h-full ${isCollapsed ? 'invisible' : 'visible'}`}>
         {renderTool()}
+      </div>
+      {/* Integrate the ChatAssistant component at the bottom */}
+      <div className="p-4 border-t border-gray-200">
+        <ChatAssistant 
+          messages={messages}
+          setMessages={setMessages}
+          onInsertToWhiteboard={onInsertToWhiteboard} 
+        />
       </div>
     </div>
   );

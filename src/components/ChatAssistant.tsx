@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+// ChatAssistant.tsx or wherever ChatAssistantProps is defined
 interface ChatAssistantProps {
+  onInsertToWhiteboard: (content: string) => void;
   messages: Array<{ role: string; content: string }>;
   setMessages: React.Dispatch<React.SetStateAction<Array<{ role: string; content: string }>>>;
 }
 
-const ChatAssistant: React.FC<ChatAssistantProps> = ({ messages, setMessages }) => {
+const ChatAssistant: React.FC<ChatAssistantProps> = ({ messages, setMessages, onInsertToWhiteboard }) => {
   const [instructionInput, setInstructionInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
