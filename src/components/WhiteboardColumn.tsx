@@ -8,7 +8,7 @@ interface WhiteboardColumnProps {
 }
 
 const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessages, className }) => {
-  const [title, setTitle] = useState('Untitled.2');
+  const [title, setTitle] = useState('whiteboard.x1');
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [instructionInput, setInstructionInput] = useState('');

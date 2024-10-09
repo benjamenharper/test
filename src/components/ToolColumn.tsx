@@ -38,6 +38,21 @@ const ToolColumn: React.FC<ToolColumnProps> = ({ selectedTool, onInsertToWhitebo
               Select a tool from the menu to get started. You can add property data, generate images, 
               and then remix it with AI in the whiteboard.
             </p>
+
+            {/* New Section */}
+            <div className="border-2 border-gray-300 p-4 mb-4 rounded">
+              <h3 className="text-lg font-semibold mb-2">Enter A Property Address, MLS ID, or Neighborhood</h3>
+              <p className="mb-4">Start working with real estate data</p>
+              <form>
+                <input 
+                  type="text" 
+                  placeholder="Enter here..." 
+                  className="w-full p-2 border border-gray-400 rounded mb-2" 
+                />
+                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">Search</button>
+              </form>
+            </div>
+
             <h3 className="text-lg font-semibold mb-2">Sample Properties</h3>
             <ul className="space-y-2">
               {properties.map((property) => (
