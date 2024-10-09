@@ -19,6 +19,7 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
   useEffect(() => {
     const apiKey = localStorage.getItem('groq_api_key');
     setApiKeySet(!!apiKey);
+    console.log('API Key Set:', !!apiKey);
   }, []);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,7 +49,9 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
     }
 
     const content = messages.map(msg => msg.content).join('\n\n');
-    
+    console.log('Sending prompt to Groq:', prompt);
+    console.log('Content:', content);
+
     try {
       const response = await axios.post(
         'https://api.groq.com/openai/v1/chat/completions',
@@ -68,6 +71,7 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
         }
       );
 
+      console.log('Groq API response:', response.data);
       const assistantReply = response.data.choices[0].message.content;
       setMessages(prevMessages => [...prevMessages, { role: 'assistant', content: assistantReply }]);
     } catch (error) {
@@ -171,5 +175,3 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
 };
 
 export default WhiteboardColumn;
- 
- Finally, we need to update the  Whiteboard  component to include the  WhiteboardColumn  components.
