@@ -171,3 +171,5 @@ const WhiteboardColumn: React.FC<WhiteboardColumnProps> = ({ messages, setMessag
 };
 
 export default WhiteboardColumn;
+ 
+ Finally, we need to update the  Whiteboard  component to include the  WhiteboardColumn  components.

@@ -138,3 +138,5 @@ const ImageGen: React.FC<ImageGenProps> = ({ onInsertToAssistant }) => {
 };
 
 export default ImageGen;
+ 
+ Finally, let's add the  ImageGen  component to the  App  component in  src/App.tsx :
